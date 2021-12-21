@@ -1,0 +1,31 @@
+diff --git a/node_modules/react-native-reanimated/src/reanimated2/core.ts b/node_modules/react-native-reanimated/src/reanimated2/core.ts
+index 2e0c38a..ea1976f 100644
+--- a/node_modules/react-native-reanimated/src/reanimated2/core.ts
++++ b/node_modules/react-native-reanimated/src/reanimated2/core.ts
+@@ -1,7 +1,7 @@
+ /* global _WORKLET _getCurrentTime _frameTimestamp _eventTimestamp, _setGlobalConsole */
+ import NativeReanimatedModule from './NativeReanimated';
+ import { Platform } from 'react-native';
+-import { nativeShouldBeMock, shouldBeUseWeb, isWeb } from './PlatformChecker';
++import { nativeShouldBeMock, shouldBeUseWeb, isWeb, isChromeDebugger } from './PlatformChecker';
+ import {
+   BasicWorkletFunction,
+   WorkletFunction,
+@@ -84,7 +84,7 @@ function _toArrayReanimated<T>(object: Iterable<T> | ArrayLike<T> | T[]): T[] {
+   if (
+     typeof Symbol !== 'undefined' &&
+     (typeof Symbol === 'function' ? Symbol.iterator : '@@iterator') in
+-      Object(object)
++    Object(object)
+   ) {
+     return Array.from(object);
+   }
+@@ -371,7 +371,7 @@ if (!NativeReanimatedModule.useOnlyV1) {
+       : (workletValueSetterJS as <T>(value: T) => void)
+   );
+ 
+-  if (!isWeb() && isConfigured()) {
++  if (!isWeb() && !isChromeDebugger() && isConfigured()) {
+     const capturableConsole = console;
+     runOnUI(() => {
+       'worklet';
